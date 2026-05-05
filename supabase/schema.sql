@@ -124,25 +124,41 @@ alter table public.messages     enable row level security;
 alter table public.invoices     enable row level security;
 alter table public.activity_log enable row level security;
 
+-- Add strict length constraints for DB Security
+alter table public.orders
+  add constraint title_length check (char_length(title) <= 255),
+  add constraint brief_length check (char_length(brief) <= 10000);
+
 -- Profiles
+drop policy if exists "Users view own profile" on public.profiles;
 create policy "Users view own profile"
   on public.profiles for select using (auth.uid() = id);
+
+drop policy if exists "Users update own profile" on public.profiles;
 create policy "Users update own profile"
-  on public.profiles for update using (auth.uid() = id);
+  on public.profiles for update using (auth.uid() = id) with check (auth.uid() = id);
 
 -- Orders
+drop policy if exists "Users view own orders" on public.orders;
 create policy "Users view own orders"
   on public.orders for select using (auth.uid() = user_id);
+
+drop policy if exists "Users create orders" on public.orders;
 create policy "Users create orders"
   on public.orders for insert with check (auth.uid() = user_id);
+
+drop policy if exists "Users update own orders" on public.orders;
 create policy "Users update own orders"
-  on public.orders for update using (auth.uid() = user_id);
+  on public.orders for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
 -- Messages
+drop policy if exists "Users view messages on own orders" on public.messages;
 create policy "Users view messages on own orders"
   on public.messages for select using (
     exists (select 1 from public.orders where orders.id = messages.order_id and orders.user_id = auth.uid())
   );
+
+drop policy if exists "Users send messages on own orders" on public.messages;
 create policy "Users send messages on own orders"
   on public.messages for insert with check (
     auth.uid() = sender_id and
@@ -150,9 +166,11 @@ create policy "Users send messages on own orders"
   );
 
 -- Invoices
+drop policy if exists "Users view own invoices" on public.invoices;
 create policy "Users view own invoices"
   on public.invoices for select using (auth.uid() = user_id);
 
 -- Activity log
+drop policy if exists "Users view own activity" on public.activity_log;
 create policy "Users view own activity"
   on public.activity_log for select using (auth.uid() = user_id);
