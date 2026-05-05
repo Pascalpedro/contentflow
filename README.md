@@ -2,6 +2,8 @@
 
 ![ContentFlow Landing Page](public/landing-preview.png) *(Preview of the landing page)*
 
+**Live Demo:** [https://contentflowww.netlify.app/](https://contentflowww.netlify.app/)
+
 **ContentFlow** is a premium, full-stack SaaS client dashboard designed for content writing agencies and businesses. It allows clients to log in, place content orders (blog posts, web copy, etc.) through a guided multi-step form, track progress in real-time, communicate with assigned writers, view analytics, and manage their team and billing settings.
 
 ---
