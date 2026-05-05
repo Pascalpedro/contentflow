@@ -92,5 +92,3 @@ This project is configured and hardened for deployment on Netlify using the `@ne
 4. **Important:** Before deploying, go to **Site configuration > Environment variables** in Netlify and add the three Supabase keys from your `.env.local` file.
 5. Click **Deploy**. Netlify will automatically detect the settings from `netlify.toml` and build your optimized production application.
 
----
-*Built by Pascal Attama & Antigravity AI.*
